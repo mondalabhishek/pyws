@@ -1,3 +1,16 @@
 ---Mongo-container----
 docker run --name mongotestdb -v /home/amondal/workspaces/pyws/mongo-data:/data/db -p 27017:27017 -d mongo:4.4.3
 
+
+---Python Virtual Env:
+sudo pip3 install virtualenv
+sudo apt-get install python3-venv
+python3 -m venv venv
+source venv/bin/activate
+deactivate
+
+---Python Packages
+https://pypi.org
+
+pip3 install package==version
+
