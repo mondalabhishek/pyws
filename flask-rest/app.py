@@ -2,9 +2,17 @@ from flask import Flask, request, json, Response
 from pymongo import MongoClient
 import logging
 from logging.handlers import RotatingFileHandler
+import redis
 
 
 app = Flask(__name__)
+
+redis_client = redis.Redis();
+
+class RedisAPI(object):
+    def __init__(self):
+        redis_client = redis.Redis(host="localhost",port=6379, password= None)
+    pass
 
 
 class MongoAPI:
@@ -53,6 +61,16 @@ class MongoAPI:
         output = {'Status': 'Successfuly Deleted' if response.deleted_count>0 else 'No Document Found for deletion'}
         return output
 
+    def getDetails(self, filter):
+        app.logger.info('Getting specific Data');
+        #app.logger.info("Filter: "+filter)
+        
+        document = self.collection.find_one(filter);
+        app.logger.info(document)
+        output = dict(document);
+        del output['_id']
+        return output
+
 def logResponse(response, operation):
     app.logger.info('Response of operation: '+operation)
     app.logger.info(json.dumps(response))
@@ -74,6 +92,26 @@ def mongo_read():
     obj1 = MongoAPI(data)
     response = obj1.read()
     logResponse(response, 'Read');
+    return Response(response=json.dumps(response),
+                    status=200,
+                    mimetype='application/json')
+
+@app.route('/mongodb/<string:name>', methods=['GET'])
+def mongo_read_one(name):
+    data = request.json
+    if data is None or data == {}:
+        app.logger.info('Missing DB Conenction Informaion');
+        return Response(response=json.dumps({"Error": "Please provide connection information"}),
+                        status=400,
+                        mimetype='application/json')
+
+    filter = {
+        'First_Name' : name
+    }
+
+    obj1 = MongoAPI(data)
+    response = obj1.getDetails(filter);
+    logResponse(response, 'Details');
     return Response(response=json.dumps(response),
                     status=200,
                     mimetype='application/json')

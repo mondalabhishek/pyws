@@ -1,6 +1,14 @@
 ---Mongo-container----
 docker run --name mongotestdb -v /home/amondal/workspaces/pyws/mongo-data:/data/db -p 27017:27017 -d mongo:4.4.3
 
+mongo Shell: Download from Mongo Website
+
+
+-----Redis Contaier-------
+docker run --name redistestdb -p 6379:6379 -v /home/amondal/workspaces/redis-data:/data -d redis:6.0.10-alpine
+
+Redis Cli: sudo apt-get install redis-tools
+
 
 ---Python Virtual Env:
 sudo pip3 install virtualenv
