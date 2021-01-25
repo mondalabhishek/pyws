@@ -3,6 +3,7 @@ from pymongo import MongoClient
 import logging
 from logging.handlers import RotatingFileHandler
 import redis
+import os
 
 
 app = Flask(__name__)
@@ -18,8 +19,11 @@ class RedisAPI(object):
 class MongoAPI:
     def __init__(self, data) :
         app.logger.info('Instantiate DB Connection: ');
+
+        dbHost = os.environ['MONGO_DB_HOST']
+        dbPort = os.environ['MONGO_DB_PORT']
  
-        self.client = MongoClient("mongodb://localhost:27017/")
+        self.client = MongoClient("mongodb://"+dbHost+":"+dbPort+"/")
 
         database = data ['database']
         collection = data ['collection']
