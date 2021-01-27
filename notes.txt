@@ -3,6 +3,7 @@ docker run --name mongotestdb -v /home/amondal/workspaces/pyws/mongo-data:/data/
 
 mongo Shell: Download from Mongo Website
 
+mongoimport --db samshikshadb --collection Courses --jsonArray --drop --file /tmp/data.json
 
 -----Redis Contaier-------
 docker run --name redistestdb -p 6379:6379 -v /home/amondal/workspaces/redis-data:/data -d redis:6.0.10-alpine
